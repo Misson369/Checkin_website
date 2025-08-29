@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5427507822521325"
+     crossorigin="anonymous"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BBS Result Calculator - Mohit Gautam</title>
+  <link rel="icon" type="image/png" href="faviconphoto.png" />
+  <meta name="description" content="BBS Result Calculator by Mohit Gautam - Calculate Percentage and yearly results easily online.">
+<style>
+  :root{
+    --primary:#3498db;
+    --dark:#2c3e50;
+    --muted:#777;
+    --fail:#e74c3c;
+    --pass:#27ae60;
+    --card-bg:#fff;
+    --page-bg:#f7f7f7;
+  }
+
+  /* Basic page */
+  body{
+    font-family: Arial, sans-serif;
+    background: var(--page-bg);
+    color: #333;
+    margin:0;
+    padding:0 15px 60px;
+    display:flex;
+    justify-content:center;
+  }
+  .page {
+    width:100%;
+    max-width:1000px;
+  }
+
+  /* Top bar with hamburger */
+  .topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    background:var(--card-bg);
+    padding:12px 16px;
+    border-radius:10px;
+    margin:18px 0;
+    box-shadow:0 2px 8px rgba(0,0,0,0.06);
+  }
+  .brand { font-weight:700; color:var(--dark); }
+  .menu-btn{
+    background:none;
+    border: none;
+    font-size:20px;
+    cursor:pointer;
+    padding:6px 8px;
+    border-radius:6px;
+  }
+  .menu-btn:hover{ background:rgba(0,0,0,0.04); }
+
+  /* Dropdown menu */
+  .menu-dropdown{
+    position:absolute;
+    right:20px;
+    top:84px;
+    background:var(--card-bg);
+    border-radius:8px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.12);
+    overflow:hidden;
+    min-width:180px;
+    display:none;
+    z-index:999;
+  }
+  .menu-dropdown a{
+    display:block;
+    padding:10px 14px;
+    color:#333;
+    text-decoration:none;
+  }
+  .menu-dropdown a:hover{ background:rgba(0,0,0,0.03); }
+
+  h1 { text-align:center; margin:8px 0 6px; color:var(--dark); }
+  p.lead { text-align:center; color:var(--muted); margin-top:0; }
+form.card {
+    background:var(--card-bg);
+    padding:18px;
+    border-radius:10px;
+    box-shadow:0 4px 18px rgba(0,0,0,0.06);
+    margin-bottom:16px;
+  }
+
+  /* label layout: left label text + input area with hint */
+  .field {
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    margin:8px 0;
+    font-weight:600;
+  }
+  .label-text { width:250px; min-width:140px; color:var(--dark); }
+  .input-wrap { display:flex; flex-direction:column; align-items:flex-start; gap:4px; }
+  input[type="number"]{
+    width:90px;
+    padding:6px 8px;
+    border-radius:6px;
+    border:1px solid #ccc;
+    font-size:14px;
+  }
+  input.invalid { border-color: var(--fail); background: #fff6f6; }
+
+  .hint {
+    font-size:12px;
+    color:var(--muted);
+    opacity:0.9;
+  }
+  .hint.invalid { color:var(--fail); font-weight:700; }
+
+  .actions { display:flex; gap:12px; margin-top:12px; }
+  .btn {
+    flex:1;
+    padding:10px;
+    border-radius:8px;
+    border:none;
+    background:var(--primary);
+    color:#fff;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .btn.secondary {
+    background:#eee;
+    color:var(--dark);
+  }
+
+  /* Result area */
+  #result { display:flex; flex-direction:column; gap:15px; margin-top:10px; }
+  .year-row { display:flex; gap:15px; flex-wrap:wrap; }
+  .year-card {
+    flex:1 1 calc(50% - 15px);
+    background:var(--card-bg);
+    padding:12px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.06);
+  }
+  table { width:100%; border-collapse:collapse; font-size:14px; margin-top:8px; }
+  th,td { border:1px solid #e0e0e0; padding:6px; text-align:center; }
+  th { background:var(--primary); color:#fff; font-weight:700; }
+  .pass { color:var(--pass); font-weight:700; }
+  .fail { color:var(--fail); font-weight:700; }
+
+  .division-box {
+    margin-top:10px;
+    padding:8px;
+    border-radius:8px;
+    background:#f0f3f5;
+    display:flex;
+    gap:12px;
+    justify-content:center;
+    flex-wrap:wrap;
+    font-weight:700;
+  }
+
+  /* overall card (full width) */
+  .overall {
+    display:flex;
+    justify-content:center;
+  }
+footer {
+    text-align:center;
+    font-size:13px;
+    color:var(--muted);
+    margin-top:18px;
+  }
+  footer a { color:var(--muted); text-decoration:none; font-weight:600; }
+  footer a:hover { text-decoration:underline; }
+
+  /* Privacy modal */
+  .modal {
+    display:none;
+    position:fixed;
+    inset:0;
+    background: rgba(0,0,0,0.5);
+    align-items:center;
+    justify-content:center;
+    z-index:1500;
+  }
+  .modal-box{
+    background:#fff;
+    width:90%;
+    max-width:760px;
+    max-height:85vh;
+    overflow:auto;
+    border-radius:10px;
+    padding:18px;
+    text-align:left;
+  }
+  .modal-box h2{ margin-top:0; }
+  .modal-close {
+    float:right;
+    background:var(--fail);
+    color:#fff;
+    border:none;
+    padding:6px 10px;
+    border-radius:6px;
+    cursor:pointer;
+  }
+
+  /* small screen adjustments */
+  @media (max-width:780px){
+    .label-text { width:140px; }
+    .year-card { flex:1 1 100%; }
+    .menu-dropdown { right:10px; top:78px; }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <!-- top bar with hamburger -->
+    <div class="topbar" role="navigation" aria-label="Top menu">
+      <div class="brand">BBS Result Calculator</div>
+      <button id="menuBtn" class="menu-btn" aria-expanded="false" aria-controls="menuDropdown" title="Open menu">|||</button>
+    </div>
+
+    <!-- dropdown menu -->
+    <nav id="menuDropdown" class="menu-dropdown" role="menu">
+      <a href="#" id="menuHome">Home</a>
+      <a href="#" id="menuPrivacy">Privacy Policy</a>
+    </nav>
+
+    <h1>BBS Result Calculator</h1>
+    <p class="lead">Enter marks for a specific year or all years. Pass is 35% per subject.</p>
+
+    <!-- Calculator form -->
+    <form id="bbsForm" class="card" autocomplete="off">
+      <h3>First Year (5 subjects, 100 marks each)</h3>
+      <label class="field">
+        <span class="label-text">Business English:</span>
+        <div class="input-wrap">
+          <input type="number" name="fy1" min="0" max="100" inputmode="numeric" />
+          
+        </div>
+      </label>
+<label class="field">
+        <span class="label-text">Business Statistics:</span>
+        <div class="input-wrap">
+          <input type="number" name="fy2" min="0" max="100" />
+
+        </div>
+      </label>
+
+      <label class="field">
+        <span class="label-text">Microeconomics:</span>
+        <div class="input-wrap">
+          <input type="number" name="fy3" min="0" max="100" />
+
+        </div>
+      </label>
+
+      <label class="field">
+        <span class="label-text">Financial Accounting:</span>
+        <div class="input-wrap">
+          <input type="number" name="fy4" min="0" max="100" />
+
+        </div>
+      </label>
+
+      <label class="field">
+        <span class="label-text">Principles of Management:</span>
+        <div class="input-wrap">
+          <input type="number" name="fy5" min="0" max="100" />
+
+        </div>
+      </label>
+
+      <h3>Second Year (5 subjects, 100 marks each)</h3>
+      <label class="field">
+        <span class="label-text">Business Communication:</span>
+        <div class="input-wrap">
+          <input type="number" name="sy1" min="0" max="100" />
+
+        </div>
+      </label>
+
+      <label class="field">
+        <span class="label-text">Macroeconomics:</span>
+        <div class="input-wrap">
+          <input type="number" name="sy2" min="0" max="100" />
+
+        </div>
+      </label>
+
+      <label class="field">
+        <span class="label-text">Cost & Management Accounting:</span>
+        <div class="input-wrap">
+          <input type="number" name="sy3" min="0" max="100" />
+
+        </div>
+      </label>
+
+      <label class="field">
+        <span class="label-text">Organizational Behavior & HRM:</span>
+        <div class="input-wrap">
+          <input type="number" name="sy4" min="0" max="100" />
+
+        </div>
+      </label>
+<label class="field">
+        <span class="label-text">Fundamentals of Financial Management:</span>
+        <div class="input-wrap">
+          <input type="number" name="sy5" min="0" max="100" />
+
+        </div>
+      </label>
+
+      <h3>Third Year (5 subjects, 100 marks each)</h3>
+      <label class="field">
+        <span class="label-text">Business Law:</span>
+        <div class="input-wrap">
+          <input type="number" name="ty1" min="0" max="100" />
+
+        </div>
+      </label>
+
+      <label class="field">
+        <span class="label-text">Foundation of Financial Systems:</span>
+        <div class="input-wrap">
+          <input type="number" name="ty2" min="0" max="100" />
+
+        </div>
+      </label>
+
+      <label class="field">
+        <span class="label-text">Business Environment & Strategy:</span>
+        <div class="input-wrap">
+          <input type="number" name="ty3" min="0" max="100" />
+
+        </div>
+      </label>
+
+      <label class="field">
+        <span class="label-text">Taxation in Nepal:</span>
+        <div class="input-wrap">
+          <input type="number" name="ty4" min="0" max="100" />
+
+        </div>
+      </label>
+
+      <label class="field">
+        <span class="label-text">Fundamentals of Marketing:</span>
+        <div class="input-wrap">
+          <input type="number" name="ty5" min="0" max="100" />
+
+        </div>
+      </label>
+
+      <h3>Fourth Year (500 marks)</h3>
+      <label class="field">
+        <span class="label-text">Entrepreneurship:</span>
+        <div class="input-wrap">
+          <input type="number" name="fy1_4" min="0" max="100" />
+
+        </div>
+      </label>
+
+      <label class="field">
+        <span class="label-text">Concentration 1:</span>
+        <div class="input-wrap">
+          <input type="number" name="fy2_4" min="0" max="100" />
+
+        </div>
+      </label>
+
+      <label class="field">
+        <span class="label-text">Concentration 2:</span>
+        <div class="input-wrap">
+          <input type="number" name="fy3_4" min="0" max="100" />
+         
+        </div>
+      </label>
+ <label class="field">
+        <span class="label-text">Concentration 3:</span>
+        <div class="input-wrap">
+          <input type="number" name="fy4_4" min="0" max="100" />
+
+        </div>
+      </label>
+
+      <label class="field">
+        <span class="label-text">Research Methods:</span>
+        <div class="input-wrap">
+          <input type="number" name="fy5_4" min="0" max="50" />
+
+        </div>
+      </label>
+
+      <label class="field">
+        <span class="label-text">Final Project:</span>
+        <div class="input-wrap">
+          <input type="number" name="fy6_4" min="0" max="50" />
+          
+        </div>
+      </label>
+
+      <div class="actions">
+        <button type="button" id="calculateBtn" class="btn">Calculate Result</button>
+        <button type="button" id="resetBtn" class="btn secondary">Reset</button>
+      </div>
+    </form>
+
+    <!-- results -->
+    <div id="result"></div>
+
+    <footer>
+      &copy; 2025 Mohit Gautam | BBS Result Calculator |
+      <a href="https://mohitgautam.com.np" target="_blank" rel="noopener">www.mohitgautam.com.np</a> |
+      <a href="privacy.html" target="_blank" rel="noopener">Full Privacy Page</a> |
+      Contact: <a href="mailto:mohitmgofficial@gmail.com">mohitmgofficial@gmail.com</a>
+    </footer>
+  </div>
+
+  <!-- Privacy modal -->
+  <div id="privacyModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-box">
+      <button id="closePrivacy" class="modal-close">Close</button>
+      <h2>Privacy Policy — BBS Result Calculator</h2>
+      <p>Last updated: August 2025</p>
+      <p>This calculator runs entirely in your browser. Marks you enter are processed locally and are <strong>not</strong> stored on our servers. We do not collect personal data through this tool unless you voluntarily contact us or submit feedback through features you explicitly use.</p>
+      <h3>What we don't do</h3>
+      <ul>
+        <li>We do not store or share your marks with third parties.</li>
+        <li>We do not use cookies or trackers for personal data collection in this tool.</li>
+      </ul>
+      <h3>Contact</h3>
+      <p>If you have questions about privacy, email: <a href="mailto:mohitmgofficial@gmail.com">mohitmgofficial@gmail.com</a></p>
+      <p style="margin-top:12px;"><a href="privacy.html" target="_blank" rel="noopener">Open full privacy page</a></p>
+    </div>
+  </div>
+
+<script>
+/* ---------- Menu & modal logic ---------- */
+const menuBtn = document.getElementById('menuBtn');
+const menuDropdown = document.getElementById('menuDropdown');
+const menuHome = document.getElementById('menuHome');
+const menuPrivacy = document.getElementById('menuPrivacy');
+const privacyModal = document.getElementById('privacyModal');
+const closePrivacy = document.getElementById('closePrivacy');
+menuBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  const shown = menuDropdown.style.display === 'block';
+  menuDropdown.style.display = shown ? 'none' : 'block';
+  menuBtn.setAttribute('aria-expanded', String(!shown));
+});
+document.addEventListener('click', (e) => {
+  if (!menuDropdown.contains(e.target) && e.target !== menuBtn) {
+    menuDropdown.style.display = 'none';
+    menuBtn.setAttribute('aria-expanded','false');
+  }
+});
+menuHome.addEventListener('click', (e) => {
+  e.preventDefault();
+  // reset form and scroll to top
+  document.getElementById('bbsForm').reset();
+  // remove validation classes and hints
+  document.querySelectorAll('input[type="number"]').forEach(inp => {
+    inp.classList.remove('invalid');
+    const hint = inp.closest('.input-wrap').querySelector('.hint');
+    if(hint) hint.classList.remove('invalid');
+  });
+  document.getElementById('result').innerHTML = '';
+  menuDropdown.style.display = 'none';
+});
+menuPrivacy.addEventListener('click', (e) => {
+  e.preventDefault();
+  privacyModal.style.display = 'flex';
+  privacyModal.setAttribute('aria-hidden','false');
+  menuDropdown.style.display = 'none';
+});
+closePrivacy.addEventListener('click', () => {
+  privacyModal.style.display = 'none';
+  privacyModal.setAttribute('aria-hidden','true');
+});
+privacyModal.addEventListener('click', (e) => {
+  if(e.target === privacyModal){
+    privacyModal.style.display = 'none';
+    privacyModal.setAttribute('aria-hidden','true');
+  }
+});
+
+
+/* ---------- Validation hints ---------- */
+const inputs = Array.from(document.querySelectorAll('input[type="number"]'));
+inputs.forEach(inp=>{
+  const max = Number(inp.getAttribute('max') || 100);
+  const wrapHint = inp.closest('.input-wrap').querySelector('.hint');
+
+  // initialize hint text (in case different max)
+  if(wrapHint){
+    wrapHint.textContent = max === 50 ? 'Enter marks ≤ 50' : 'Enter marks ≤ 100';
+  }
+
+  inp.addEventListener('input', () => {
+    const valStr = inp.value.trim();
+    if(valStr === ''){
+      inp.classList.remove('invalid');
+      if(wrapHint){ wrapHint.classList.remove('invalid'); wrapHint.textContent = max === 50 ? 'Enter marks ≤ 50' : 'Enter marks ≤ 100'; }
+      return;
+    }
+    const val = Number(valStr);
+    if(isNaN(val) || val < 0 || val > max){
+      inp.classList.add('invalid');
+      if(wrapHint){ wrapHint.classList.add('invalid'); 
+        wrapHint.textContent = val < 0 ? 'Value cannot be negative' : `Value must be between 0 and ${max}`;
+      }
+    } else {
+      inp.classList.remove('invalid');
+      if(wrapHint){ wrapHint.classList.remove('invalid'); wrapHint.textContent = `Enter marks ≤ ${max}`; }
+    }
+  });
+});
+
+/* ---------- Calculator logic ---------- */
+const form = document.getElementById('bbsForm');
+const calculateBtn = document.getElementById('calculateBtn');
+const resetBtn = document.getElementById('resetBtn');
+
+const subjectNames = {
+  fy1:"Business English", fy2:"Business Statistics", fy3:"Microeconomics",
+  fy4:"Financial Accounting", fy5:"Principles of Management",
+  sy1:"Business Communication", sy2:"Macroeconomics", sy3:"Cost & Management Accounting",
+  sy4:"Organizational Behavior & HRM", sy5:"Fundamentals of Financial Management",
+  ty1:"Business Law", ty2:"Foundation of Financial Systems", ty3:"Business Environment & Strategy",
+  ty4:"Taxation in Nepal", ty5:"Fundamentals of Marketing",
+  fy1_4:"Entrepreneurship", fy2_4:"Concentration 1", fy3_4:"Concentration 2",
+  fy4_4:"Concentration 3", fy5_4:"Research Methods", fy6_4:"Final Project"
+};
+
+
+calculateBtn.addEventListener('click', () => {
+  // quick validation: ensure no input marked invalid
+  let hasInvalid = false;
+  inputs.forEach(inp => {
+    const val = inp.value.trim();
+    const max = Number(inp.getAttribute('max') || 100);
+    if(val !== ''){
+      const n = Number(val);
+      if(isNaN(n) || n < 0 || n > max) hasInvalid = true;
+    }
+  });
+  if(hasInvalid){
+    alert('Please fix invalid inputs (highlighted in red) before calculating.');
+    return;
+  }
+
+  // prepare years
+  const years = [
+    { name:"First Year", keys:["fy1","fy2","fy3","fy4","fy5"], maxMarks:[100,100,100,100,100] },
+    { name:"Second Year", keys:["sy1","sy2","sy3","sy4","sy5"], maxMarks:[100,100,100,100,100] },
+    { name:"Third Year", keys:["ty1","ty2","ty3","ty4","ty5"], maxMarks:[100,100,100,100,100] },
+    { name:"Fourth Year", keys:["fy1_4","fy2_4","fy3_4","fy4_4","fy5_4","fy6_4"], maxMarks:[100,100,100,100,50,50] }
+  ];
+
+  const resultDiv = document.getElementById('result');
+  resultDiv.innerHTML = '';
+  let overallObtained = 0, overallMax = 0, overallFail = false;
+
+  const row1 = document.createElement('div'); row1.className = 'year-row';
+  const row2 = document.createElement('div'); row2.className = 'year-row';
+
+  years.forEach((y, index) => {
+    // check if any input for this year was entered
+    const enteredKeys = y.keys.filter(k => {
+      const v = form.elements[k].value;
+      return (v !== '' && !isNaN(Number(v)));
+    });
+    if(enteredKeys.length === 0) return; // skip year
+
+    let total = 0, maxTotal = 0, fail = false;
+    const subjects = [];
+
+    y.keys.forEach((key, j) => {
+      const raw = form.elements[key].value;
+      if(raw === '') return; // skip empty
+      const val = Number(raw);
+      const max = y.maxMarks[j];
+      // (we already tested numeric validity above)
+      const percent = (val / max) * 100;
+      if(percent < 35) fail = true;
+      total += val; maxTotal += max;
+      subjects.push({
+        name: subjectNames[key] || key,
+        obtained: val,
+        max: max,
+        percent: percent,
+        status: percent < 35 ? 'Fail' : 'Pass'
+      });
+    });
+
+    overallObtained += total;
+    overallMax += maxTotal;
+    if(fail) overallFail = true;
+
+    // render year card
+    const card = document.createElement('div'); card.className = 'year-card';
+    let html = `<h3>${y.name}</h3>
+      <table>
+        <tr><th>Subject</th><th>Obtained</th><th>Max</th><th>Percentage</th><th>Status</th></tr>`;
+    subjects.forEach(s => {
+      html += `<tr>
+        <td>${s.name}</td>
+        <td>${s.obtained}</td>
+        <td>${s.max}</td>
+        <td>${s.percent.toFixed(2)}%</td>
+        <td class="${s.status==='Fail' ? 'fail' : 'pass'}">${s.status}</td>
+      </tr>`;
+    });
+    html += `</table>`;
+
+    const yrPercent = maxTotal === 0 ? 0 : (total / maxTotal) * 100;
+    let division = '', divClass = '';
+    if(fail){ division = 'Fail'; divClass='fail-division'; }
+    else if(yrPercent >= 75){ division='Distinction'; divClass='distinction'; }
+    else if(yrPercent >= 60){ division='First Division'; divClass='first'; }
+    else if(yrPercent >= 45){ division='Second Division'; divClass='second'; }
+    else if(yrPercent >= 35){ division='Third Division'; divClass='third'; }
+
+    html += `<div class="division-box ${divClass}">
+      <span>Total: ${total} / ${maxTotal}</span>
+      <span>Percentage: ${yrPercent.toFixed(2)}%</span>
+      <span>Division: ${division}</span>
+    </div>`;
+
+    card.innerHTML = html;
+
+    if(index < 2) row1.appendChild(card);
+    else row2.appendChild(card);
+  });
+
+  // append rows (only non-empty ones)
+  if(row1.children.length) resultDiv.appendChild(row1);
+  if(row2.children.length) resultDiv.appendChild(row2);
+
+  // overall result (when more than one year entered)
+  const enteredYearsCount = years.filter(y => y.keys.some(k => form.elements[k].value !== '')).length;
+  if(overallMax > 0 && enteredYearsCount > 1){
+    const finalPercent = (overallObtained / overallMax) * 100;
+    let finalDiv = '', finalClass = '';
+  if(overallFail){ finalDiv = 'Fail'; finalClass='fail-division'; }
+    else if(finalPercent >= 75){ finalDiv='Distinction'; finalClass='distinction'; }
+    else if(finalPercent >= 60){ finalDiv='First Division'; finalClass='first'; }
+    else if(finalPercent >= 45){ finalDiv='Second Division'; finalClass='second'; }
+    else if(finalPercent >= 35){ finalDiv='Third Division'; finalClass='third'; }
+
+    const finalCard = document.createElement('div');
+    finalCard.className = 'division-box overall';
+    finalCard.style.flexDirection = 'column';
+    finalCard.innerHTML = `
+      <div style="text-align:center; font-weight:bold; margin-bottom:6px;">Overall Result</div>
+      <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:16px;">
+        <span>Total Marks: ${overallObtained} / ${overallMax}</span>
+        <span>Percentage: ${finalPercent.toFixed(2)}%</span>
+        <span>Division: <span class="${finalClass}">${finalDiv}</span></span>
+      </div>
+    `;
+    resultDiv.appendChild(finalCard);
+    // scroll to result
+    setTimeout(()=> finalCard.scrollIntoView({behavior:'smooth', block:'center'}), 50);
+  } else if(overallMax > 0 && enteredYearsCount === 1) {
+    // If user entered single year, result cards already show totals under each year
+    // scroll to results
+    setTimeout(()=> resultDiv.scrollIntoView({behavior:'smooth', block:'center'}), 50);
+  } else {
+    // nothing entered
+    alert('Please enter at least one subject mark to calculate.');
+  }
+});
+
+/* reset action */
+resetBtn.addEventListener('click', () => {
+  form.reset();
+  document.getElementById('result').innerHTML = '';
+  inputs.forEach(inp=>{
+    inp.classList.remove('invalid');
+    const hint = inp.closest('.input-wrap').querySelector('.hint');
+    if(hint) hint.classList.remove('invalid');
+  });
+});
+  
+</script>
+</body>
+</html>
